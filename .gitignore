@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+
+# nextjs
+.next/
+out/
+
+# env files
+.env
+.env.local
+
+# logs
+*.log
+
+# build
+dist/
+build/
+
+# vscode
+.vscode/
+
+# mac
+.DS_Store
