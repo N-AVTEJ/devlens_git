@@ -7,7 +7,7 @@
 [![Three.js](https://img.shields.io/badge/Three.js-r184-black?style=for-the-badge&logo=three.js)](https://threejs.org/)
 [![GSAP](https://img.shields.io/badge/GSAP-3.15-green?style=for-the-badge&logo=greensock)](https://gsap.com/)
 
-DevLens AI is a state-of-the-art **Career Intelligence Platform** that helps developers, students, and tech newcomers identify their optimal engineering paths. By combining real-time **GitHub repository profiling** with **Google Gemini 1.5 Flash AI analysis** and interactive **Career Interest Quizzes**, DevLens AI translates raw code metrics and personal interests into structured, actionable career guidance.
+DevLens AI is a state-of-the-art **Career Intelligence Platform** that helps developers, students, and tech newcomers identify their optimal engineering paths. By combining real-time **GitHub repo[...]" 
 
 ---
 
@@ -73,8 +73,8 @@ devlens/
 │   │   ├── GlowCursor.jsx        # Cyberpunk particle mouse cursor effect
 │   │   ├── HeroCard3D.jsx        # Interactive 3D component with React Three Fiber
 │   │   ├── ParticleField.jsx     # Floating background particles canvas
-│   │   ├── ScanSequence.jsx      # Retro loading terminal emulator
-│   │   └── SkeletonDashboard.jsx # Dashboard loading visual feedback
+│   │   │   ├── ScanSequence.jsx      # Retro loading terminal emulator
+│   │   │   └── SkeletonDashboard.jsx # Dashboard loading visual feedback
 │   ├── data/
 │   │   └── quizQuestions.js      # Structured quiz payload data
 │   ├── hooks/
@@ -123,7 +123,7 @@ GITHUB_TOKEN=your_github_personal_access_token_here
 # App Base URL
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```
-> **Note**: You can get a Gemini API Key from the [Google AI Studio](https://aistudio.google.com/). You can generate a GitHub token under your GitHub Profile Developer settings (Settings -> Developer settings -> Personal access tokens -> Tokens classic).
+> **Note**: You can get a Gemini API Key from the [Google AI Studio](https://aistudio.google.com/). You can generate a GitHub token under your GitHub Profile Developer settings (Settings -> Developer settings -> Personal access tokens).
 
 ### 4. Run the Development Server
 ```bash
@@ -170,5 +170,4 @@ Contributions are welcome! Please feel free to open a Pull Request or file an Is
 
 ---
 
-*Built with 💚 and AI using Next.js, Tailwind, Three.js, and Google Gemini API.*#   d e v l e n s _ g i t  
- 
+*Built with 💚 and AI using Next.js, Tailwind, Three.js, and Google Gemini API.*
