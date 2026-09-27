@@ -4,6 +4,19 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextResponse } from 'next/server'
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders,
+  })
+}
+
 export async function POST(req) {
   console.log('GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY)
   try {
@@ -13,7 +26,7 @@ export async function POST(req) {
       console.error('GEMINI_API_KEY is not set in .env.local')
       return NextResponse.json(
         { error: 'Gemini API key not configured' }, 
-        { status: 500 }
+        { status: 500, headers: corsHeaders }
       )
     }
 
@@ -22,32 +35,41 @@ export async function POST(req) {
     if (!prompt) {
       return NextResponse.json(
         { error: 'No prompt provided' }, 
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       )
     }
 
     const genAI = new GoogleGenerativeAI(apiKey)
+    const generationConfig = { responseMimeType: 'application/json' }
     let text = ''
+
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-3.8-flash' })
+      const model = genAI.getGenerativeModel({ model: 'gemini-3.8-flash', generationConfig })
       const result = await model.generateContent(prompt)
       text = result.response.text()
     } catch (primaryErr) {
       console.warn('gemini-3.8-flash error, trying gemini-2.5-flash fallback:', primaryErr.message)
-      const fallbackModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
-      const result = await fallbackModel.generateContent(prompt)
-      text = result.response.text()
+      try {
+        const fallbackModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash', generationConfig })
+        const result = await fallbackModel.generateContent(prompt)
+        text = result.response.text()
+      } catch (secondaryErr) {
+        console.warn('gemini-2.5-flash error, trying gemini-flash-latest fallback:', secondaryErr.message)
+        const tertiaryModel = genAI.getGenerativeModel({ model: 'gemini-flash-latest', generationConfig })
+        const result = await tertiaryModel.generateContent(prompt)
+        text = result.response.text()
+      }
     }
 
     console.log('Gemini response received, length:', text.length)
 
-    return NextResponse.json({ result: text })
+    return NextResponse.json({ result: text }, { headers: corsHeaders })
 
   } catch (error) {
     console.error('Gemini API error:', error.message)
     return NextResponse.json(
       { error: error.message }, 
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     )
   }
 }
