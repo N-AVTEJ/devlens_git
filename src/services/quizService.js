@@ -1,4 +1,9 @@
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
+};
 
 export async function analyzeQuizAnswers(answers) {
   const prompt = `You are a senior tech career counsellor in 2025.
@@ -67,7 +72,8 @@ Return this exact structure:
 }`;
 
   try {
-    const response = await fetch(`${BASE_URL}/api/gemini`, {
+    const baseUrl = getBaseUrl();
+    const response = await fetch(`${baseUrl}/api/gemini`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -76,7 +82,9 @@ Return this exact structure:
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch from Gemini API');
+      const errData = await response.json().catch(() => ({}));
+      console.error('Gemini API endpoint error (Quiz):', response.status, errData);
+      throw new Error(errData.error || 'Failed to fetch from Gemini API');
     }
 
     const data = await response.json();
@@ -92,7 +100,21 @@ Return this exact structure:
     }
     
     console.log('Cleaned Gemini Quiz JSON:', jsonString);
-    const parsed = JSON.parse(jsonString);
+
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonString);
+    } catch (parseErr) {
+      console.warn('Initial JSON.parse failed on quiz, attempting control char cleanup:', parseErr.message);
+      const cleaned = jsonString.replace(/[\u0000-\u001F]+/g, (match) => {
+        if (match === '\n') return '\\n';
+        if (match === '\r') return '\\r';
+        if (match === '\t') return '\\t';
+        return '';
+      });
+      parsed = JSON.parse(cleaned);
+    }
+
     if (parsed && typeof parsed.recruiterFeedback === 'string') {
       parsed.recruiterFeedback = {
         professional: parsed.recruiterFeedback,
