@@ -27,9 +27,17 @@ export async function POST(req) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' })
-    const result = await model.generateContent(prompt)
-    const text = result.response.text()
+    let text = ''
+    try {
+      const model = genAI.getGenerativeModel({ model: 'gemini-3.8-flash' })
+      const result = await model.generateContent(prompt)
+      text = result.response.text()
+    } catch (primaryErr) {
+      console.warn('gemini-3.8-flash error, trying gemini-2.5-flash fallback:', primaryErr.message)
+      const fallbackModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+      const result = await fallbackModel.generateContent(prompt)
+      text = result.response.text()
+    }
 
     console.log('Gemini response received, length:', text.length)
 
