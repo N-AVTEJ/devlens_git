@@ -69,7 +69,14 @@ export default function CareerQuiz({ analysis, onComplete, onBack }) {
           >
             {/* Top progress bar */}
             <div>
-              <div className="bg-white/10 rounded-full h-1.5 w-full overflow-hidden">
+              <div 
+                className="bg-white/10 rounded-full h-1.5 w-full overflow-hidden"
+                role="progressbar"
+                aria-valuenow={current + 1}
+                aria-valuemin={1}
+                aria-valuemax={quizQuestions.length}
+                aria-label={`Question ${current + 1} of ${quizQuestions.length}`}
+              >
                 <motion.div
                   className="bg-[#ef233c] h-full rounded-full"
                   initial={{ width: '0%' }}
@@ -77,7 +84,7 @@ export default function CareerQuiz({ analysis, onComplete, onBack }) {
                   transition={{ type: 'spring', stiffness: 180, damping: 22 }}
                 />
               </div>
-              <div className="text-white/40 text-xs text-right mt-2 font-mono">
+              <div className="text-white/70 text-xs text-right mt-2 font-mono">
                 Question {current + 1} of {quizQuestions.length}
               </div>
             </div>
@@ -105,18 +112,21 @@ export default function CareerQuiz({ analysis, onComplete, onBack }) {
               </AnimatePresence>
 
               {/* Selection Options */}
-              <div className="space-y-3.5">
+              <div className="space-y-3.5" role="radiogroup" aria-label={activeQuestion.question}>
                 {activeQuestion.options.map((option, idx) => {
                   const isSelected = selected === option
                   return (
                     <motion.button
                       key={idx}
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setSelected(option)}
-                      className={`w-full text-left px-6 py-4 rounded-xl border text-sm font-medium transition-all ${
+                      className={`w-full text-left px-6 py-4 rounded-xl border text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c] ${
                         isSelected
                           ? 'border-[#ef233c] bg-[#ef233c]/10 text-white'
-                          : 'border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:bg-white/10'
+                          : 'border-white/10 bg-white/5 text-white/80 hover:border-white/30 hover:bg-white/10'
                       }`}
                     >
                       {option.text}
@@ -128,12 +138,13 @@ export default function CareerQuiz({ analysis, onComplete, onBack }) {
               {/* Action Button */}
               <div className="mt-8">
                 <button
+                  type="button"
                   onClick={handleNext}
                   disabled={!selected}
-                  className={`w-full py-4 rounded-full font-semibold transition-all active:scale-[0.98] shadow-lg ${
+                  className={`w-full py-4 rounded-full font-semibold transition-all active:scale-[0.98] shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c] ${
                     selected
                       ? 'bg-[#ef233c] hover:bg-red-700 text-white shadow-red-500/10 hover:shadow-red-500/20'
-                      : 'bg-white/5 text-white/20 cursor-not-allowed'
+                      : 'bg-white/5 text-white/30 cursor-not-allowed'
                   }`}
                 >
                   {current === quizQuestions.length - 1 ? 'Get My Career Matches →' : 'Next Question →'}
