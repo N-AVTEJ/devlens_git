@@ -17,31 +17,44 @@ function AnalyzeContent() {
   const githubAnalysis = useGitHubAnalysis()
   const quizAnalysis = useQuizAnalysis()
 
-  const [path, setPath] = useState(null)
-  const [selectedCard, setSelectedCard] = useState(null)
+  const initialUrlPath = searchParams.get('path')
+  const validInitialPath = (initialUrlPath === 'github' || initialUrlPath === 'quiz') ? initialUrlPath : null
+
+  const [path, setPath] = useState(validInitialPath)
+  const [selectedCard, setSelectedCard] = useState(validInitialPath)
   const [result, setResult] = useState(null)
 
-  // Automatically read query path parameter on mount
+  // Automatically sync query path parameter on navigation without flashing
   useEffect(() => {
     const urlPath = searchParams.get('path')
     if (urlPath === 'github' || urlPath === 'quiz') {
       setPath(urlPath)
       setSelectedCard(urlPath)
+    } else if (!urlPath) {
+      setPath(null)
+      setSelectedCard(null)
     }
   }, [searchParams])
 
   const selectPath = (selectedPath) => {
     setPath(selectedPath)
     setSelectedCard(selectedPath)
-    // Synchronize query parameters for better navigation support
-    router.push(`/analyze?path=${selectedPath}`)
+    // Synchronize query parameters using router.replace to avoid history stack pollution
+    router.replace(`/analyze?path=${selectedPath}`)
   }
 
   const goBack = () => {
+    if (result) {
+      setResult(null)
+      return
+    }
     setPath(null)
     setSelectedCard(null)
-    setResult(null)
-    router.push('/analyze')
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back()
+    } else {
+      router.push('/')
+    }
   }
 
   // Determine active loading phase
@@ -77,7 +90,7 @@ function AnalyzeContent() {
             style={{ willChange: 'transform' }}
             className="w-full"
           >
-            <Dashboard data={result} />
+            <Dashboard data={result} onBack={goBack} />
           </motion.div>
         ) : path === null ? (
           <motion.div
@@ -104,15 +117,25 @@ function AnalyzeContent() {
               {/* GitHub Path Card */}
               <motion.div
                 layoutId="github-card"
+                role="button"
+                tabIndex={0}
+                aria-label="Analyse My GitHub profile path"
                 onClick={() => { setSelectedCard('github'); selectPath('github') }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    setSelectedCard('github')
+                    selectPath('github')
+                  }
+                }}
                 data-magnetic
-                className="path-select-card cursor-pointer p-12 md:p-16 bg-black hover:bg-[#ef233c]/[0.03] transition-colors duration-300 relative overflow-hidden group flex flex-col justify-between min-h-[50vh]"
+                className="path-select-card cursor-pointer p-12 md:p-16 bg-black hover:bg-[#ef233c]/[0.03] transition-colors duration-300 relative overflow-hidden group flex flex-col justify-between min-h-[50vh] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
                 whileHover={{ x: 4 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                 style={{ willChange: 'transform' }}
               >
                 {/* Massive Decorative Background Identifier */}
-                <div className="absolute bottom-4 right-4 text-[180px] md:text-[230px] font-black text-[#ef233c]/[0.03] leading-none select-none font-mono">
+                <div className="absolute bottom-4 right-4 text-[180px] md:text-[230px] font-black text-[#ef233c]/[0.03] leading-none select-none font-mono" aria-hidden="true">
                   01
                 </div>
 
@@ -130,8 +153,8 @@ function AnalyzeContent() {
                       'Get internship readiness score',
                       'AI recruiter feedback on your profile'
                     ].map((bullet, index) => (
-                      <div key={index} className="flex items-center gap-2.5 text-sm text-white/40 font-mono">
-                        <span className="text-[#ef233c] font-bold">→</span>
+                      <div key={index} className="flex items-center gap-2.5 text-sm text-white/70 font-mono">
+                        <span className="text-[#ef233c] font-bold" aria-hidden="true">→</span>
                         <span>{bullet}</span>
                       </div>
                     ))}
@@ -149,15 +172,25 @@ function AnalyzeContent() {
               {/* Career Quiz Path Card */}
               <motion.div
                 layoutId="quiz-card"
+                role="button"
+                tabIndex={0}
+                aria-label="I'm New to Tech beginner career interest quiz path"
                 onClick={() => { setSelectedCard('quiz'); selectPath('quiz') }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    setSelectedCard('quiz')
+                    selectPath('quiz')
+                  }
+                }}
                 data-magnetic
-                className="path-select-card cursor-pointer p-12 md:p-16 bg-black hover:bg-[#ff3366]/[0.03] transition-colors duration-300 relative overflow-hidden group flex flex-col justify-between min-h-[50vh]"
+                className="path-select-card cursor-pointer p-12 md:p-16 bg-black hover:bg-[#ff3366]/[0.03] transition-colors duration-300 relative overflow-hidden group flex flex-col justify-between min-h-[50vh] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3366]"
                 whileHover={{ x: -4 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                 style={{ willChange: 'transform' }}
               >
                 {/* Massive Decorative Background Identifier */}
-                <div className="absolute bottom-4 right-4 text-[180px] md:text-[230px] font-black text-[#ff3366]/[0.03] leading-none select-none font-mono">
+                <div className="absolute bottom-4 right-4 text-[180px] md:text-[230px] font-black text-[#ff3366]/[0.03] leading-none select-none font-mono" aria-hidden="true">
                   02
                 </div>
 
@@ -175,8 +208,8 @@ function AnalyzeContent() {
                       'Beginner-friendly roadmap',
                       'First steps you can take today'
                     ].map((bullet, index) => (
-                      <div key={index} className="flex items-center gap-2.5 text-sm text-white/40 font-mono">
-                        <span className="text-[#ff3366] font-bold">→</span>
+                      <div key={index} className="flex items-center gap-2.5 text-sm text-white/70 font-mono">
+                        <span className="text-[#ff3366] font-bold" aria-hidden="true">→</span>
                         <span>{bullet}</span>
                       </div>
                     ))}
