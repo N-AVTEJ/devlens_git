@@ -10,6 +10,7 @@ import {
   ResponsiveContainer
 } from 'recharts'
 import html2canvas from 'html2canvas'
+import BackButton from './BackButton'
 
 // Morphing Icons definition
 const flameIcon = "M12 2C8 6 6 9 8 12c1-2 3-3 4-2-2 3-1 6 2 7-4 0-7-3-7-7 0-5 5-10 5-10z"
@@ -35,7 +36,7 @@ function AnimatedNumber({ value, delay = 0 }) {
   return <span className="score-display font-mono">{display}</span>
 }
 
-export default function Dashboard({ data }) {
+export default function Dashboard({ data, onBack }) {
   const {
     detectedRole = 'Software Engineer',
     careerMatches = [],
@@ -130,12 +131,15 @@ export default function Dashboard({ data }) {
   return (
     <div className="min-h-screen text-white pt-24 pb-16 font-sans">
       
+      {/* Back button */}
+      <BackButton onClick={onBack} label="BACK" />
+
       {/* STICKY TOP SCORE HEADER WITH GPU ACCELERATION */}
       <header 
-        className="sticky top-0 bg-black/80 backdrop-blur-md border-b border-white/5 z-50 px-8 py-4 select-none mb-12"
+        className="sticky top-0 bg-black/80 backdrop-blur-md border-b border-white/5 z-40 px-8 py-4 select-none mb-12"
         style={{ transform: 'translateZ(0)' }}
       >
-        <div className="max-w-[1440px] mx-auto flex justify-between items-center">
+        <div className="max-w-[1440px] mx-auto flex justify-between items-center pl-24 md:pl-28">
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-[#ef233c] animate-[pulse-glow_2s_infinite]" />
             <span className="font-mono text-[#ef233c] text-xs uppercase tracking-[0.2em] font-bold">
@@ -145,14 +149,14 @@ export default function Dashboard({ data }) {
 
           <div className="flex items-center gap-6">
             <div className="text-right">
-              <div className="font-mono text-[10px] text-white/30 uppercase tracking-widest mb-0.5">Readiness Score</div>
+              <div className="font-mono text-[10px] text-white/60 uppercase tracking-widest mb-0.5">Readiness Score</div>
               <div className="font-mono text-3xl font-black text-[#ef233c] score-display animate-[flicker_0.5s_ease-out]">
                 <AnimatedNumber value={readinessScore} delay={150} />/100
               </div>
             </div>
             <div className="w-px h-8 bg-white/10" />
             <div className="text-right">
-              <div className="font-mono text-[10px] text-white/30 uppercase tracking-widest mb-0.5">Detected Role</div>
+              <div className="font-mono text-[10px] text-white/60 uppercase tracking-widest mb-0.5">Detected Role</div>
               <div className="font-bold text-white text-base font-sans">{detectedRole}</div>
             </div>
           </div>
