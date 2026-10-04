@@ -284,6 +284,10 @@ export default function GlowCursor() {
     }
   }
 
+  if (isMobile || reducedMotion) {
+    return null
+  }
+
   return (
     <>
       {/* LAYER 3 — Ambient Glow Aura (trailing, color-shifting, high blur) */}
