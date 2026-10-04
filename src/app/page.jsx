@@ -264,28 +264,28 @@ export default function LandingPage() {
             </div>
 
             {/* Subtext */}
-            <p className="hero-sub text-white/40 text-xl font-light tracking-wide max-w-md mb-10 leading-relaxed font-manrope">
+            <p className="hero-sub text-white/70 text-xl font-light tracking-wide max-w-md mb-10 leading-relaxed font-manrope">
               Real GitHub analysis. AI career matching. Honest recruiter feedback. No fluff.
             </p>
 
             {/* Action buttons - rounded shiny borders */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/analyze" className="w-full sm:w-auto">
+              <Link href="/analyze?path=github" className="w-full sm:w-auto">
                 <button
                   ref={magneticBtn1}
                   data-magnetic
-                  className="hero-buttons shiny-cta group w-full sm:w-auto"
+                  className="hero-buttons shiny-cta group w-full sm:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
                 >
                   <span className="relative z-10 flex items-center gap-2 text-white font-medium">
-                    Analyse My GitHub <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    Analyse My GitHub <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                   </span>
                 </button>
               </Link>
-              <Link href="/analyze" className="w-full sm:w-auto">
+              <Link href="/analyze?path=quiz" className="w-full sm:w-auto">
                 <button
                   ref={magneticBtn2}
                   data-magnetic
-                  className="hero-buttons border border-zinc-800 text-zinc-300 font-medium hover:text-white hover:bg-zinc-800 transition-all rounded-full w-full sm:w-auto bg-zinc-900/60 px-8 py-4 flex items-center justify-center gap-2"
+                  className="hero-buttons border border-zinc-800 text-zinc-300 font-medium hover:text-white hover:bg-zinc-800 transition-all rounded-full w-full sm:w-auto bg-zinc-900/60 px-8 py-4 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3366]"
                 >
                   I'm New to Tech
                 </button>
@@ -297,7 +297,7 @@ export default function LandingPage() {
               {['14+ Languages', 'Real GitHub Data', 'AI-Powered'].map((stat, idx) => (
                 <div key={idx}>
                   <div className="font-mono text-[#ef233c] text-xs uppercase tracking-wider">{stat}</div>
-                  <div className="text-white/20 text-[10px] font-mono mt-0.5 uppercase tracking-widest">verified</div>
+                  <div className="text-white/60 text-[10px] font-mono mt-0.5 uppercase tracking-widest">verified</div>
                 </div>
               ))}
             </div>
