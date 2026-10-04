@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { quizQuestions } from '../data/quizQuestions'
 import ScanSequence from './ScanSequence'
+import BackButton from './BackButton'
 
 export default function CareerQuiz({ analysis, onComplete, onBack }) {
   const [current, setCurrent] = useState(0)
@@ -51,12 +52,7 @@ export default function CareerQuiz({ analysis, onComplete, onBack }) {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#ff3366]/5 blur-[120px] w-[500px] h-[500px] rounded-full pointer-events-none" />
 
       {/* Back button */}
-      <button
-        onClick={onBack}
-        className="absolute top-8 left-8 text-white/55 hover:text-white flex items-center gap-2 font-mono text-sm transition-all"
-      >
-        <span>←</span> BACK TO PATHS
-      </button>
+      <BackButton onClick={onBack} label="BACK TO PATHS" />
 
       {/* Scan screen overlay when loading - Active only during the github scanning phase */}
       <ScanSequence scanMessages={scanMessages} scanStep={scanStep} isLoading={loading && loadingPhase === 'github'} />
