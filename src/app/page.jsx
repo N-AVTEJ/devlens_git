@@ -1,14 +1,23 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { motion } from 'framer-motion'
-import HeroCard3D from '../components/HeroCard3D'
 import Link from 'next/link'
 import useMagneticHover from '../hooks/useMagneticHover'
-import ParticleField from '../components/ParticleField'
 
+// Dynamic lazy imports to prevent blocking initial paint
+const HeroCard3D = dynamic(() => import('../components/HeroCard3D'), {
+  ssr: false,
+  loading: () => null,
+})
+
+const ParticleField = dynamic(() => import('../components/ParticleField'), {
+  ssr: false,
+  loading: () => null,
+})
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -28,6 +37,18 @@ export default function LandingPage() {
   const magneticCta = useMagneticHover(0.2)
 
   useEffect(() => {
+    // Respect prefers-reduced-motion: cancel GSAP animations if user requested reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) {
+      gsap.set('.hero-headline, .hero-sub, .hero-buttons, .hero-stats, .problem-card, .step-item, .feature-card, .path-card, .cta-content', {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+      })
+      return
+    }
+
     // Hero entrance — fires immediately on load
     gsap.fromTo('.hero-headline',
       { y: 60, opacity: 0 },
