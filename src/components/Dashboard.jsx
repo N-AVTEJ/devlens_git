@@ -179,7 +179,7 @@ export default function Dashboard({ data, onBack }) {
             >
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <span className="font-mono text-xs text-white/30 uppercase tracking-widest">
+                  <span className="font-mono text-xs text-white/60 uppercase tracking-widest">
                     Career Matches
                   </span>
                   <span className="font-mono text-[10px] text-[#ef233c] uppercase tracking-wider">
@@ -198,7 +198,7 @@ export default function Dashboard({ data, onBack }) {
                           <span className="font-semibold text-sm text-white group-hover:text-[#ef233c] transition-colors duration-300">
                             {match.role}
                           </span>
-                          <span className="font-mono text-xl font-black text-white/20 group-hover:text-[#ef233c] transition-colors duration-300 score-display">
+                          <span className="font-mono text-xl font-black text-white/40 group-hover:text-[#ef233c] transition-colors duration-300 score-display">
                             <AnimatedNumber value={match.match} delay={idx * 150} />%
                           </span>
                         </div>
@@ -215,7 +215,7 @@ export default function Dashboard({ data, onBack }) {
                             transition={{ duration: 1.4, delay: idx * 0.15, ease: [0.33, 1, 0.68, 1] }}
                           />
                         </div>
-                        <p className="text-[10px] text-white/20 font-mono leading-relaxed group-hover:text-white/40 transition-colors duration-300">
+                        <p className="text-[11px] text-white/65 font-mono leading-relaxed group-hover:text-white/85 transition-colors duration-300">
                           {match.reason}
                         </p>
                       </div>
@@ -230,16 +230,29 @@ export default function Dashboard({ data, onBack }) {
               {...cardTransition(1)}
               className="card-glow p-6 rounded-none"
             >
-              <span className="font-mono text-xs text-white/30 uppercase tracking-widest block mb-4">
+              <span className="font-mono text-xs text-white/60 uppercase tracking-widest block mb-4">
                 Capabilities Radar
               </span>
-              <div className="w-full h-[240px] flex items-center justify-center">
+              
+              {/* Screen reader equivalent summary */}
+              <div className="sr-only">
+                <h4>Capabilities Radar Summary</h4>
+                <ul>
+                  {radarData.map((item, idx) => (
+                    <li key={idx}>
+                      {item.axis}: {item.score} out of 100
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="w-full h-[240px] flex items-center justify-center" aria-hidden="true">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
                     <PolarGrid stroke="rgba(255,255,255,0.06)" strokeWidth={1} />
                     <PolarAngleAxis
                       dataKey="axis"
-                      tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10, fontFamily: 'var(--font-mono)' }}
+                      tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 10, fontFamily: 'var(--font-mono)' }}
                     />
                     <Radar
                       name="Skills"
