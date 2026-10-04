@@ -594,16 +594,16 @@ export default function LandingPage() {
             </div>
 
             <div className="relative z-10">
-              <div className="text-4xl mb-6 select-none">⚡</div>
+              <div className="text-4xl mb-6 select-none" aria-hidden="true">⚡</div>
               <h3 className="text-4xl font-black font-manrope text-white mb-4">I Have GitHub</h3>
-              <p className="text-white/40 text-sm mb-8 max-w-xs font-light">
+              <p className="text-white/70 text-sm mb-8 max-w-xs font-light">
                 Analyse all your public repositories, languages, and commit parameters in real time.
               </p>
               
               <div className="space-y-3.5 mb-8">
                 {['Analyse all public repositories', 'Detect languages and skill levels', 'Get internship readiness score', 'AI recruiter feedback on your profile'].map((bullet, index) => (
-                  <div key={index} className="flex items-center gap-2.5 text-xs text-white/50 font-mono">
-                    <span className="text-[#ef233c]">→</span>
+                  <div key={index} className="flex items-center gap-2.5 text-xs text-white/75 font-mono">
+                    <span className="text-[#ef233c]" aria-hidden="true">→</span>
                     <span>{bullet}</span>
                   </div>
                 ))}
@@ -611,7 +611,10 @@ export default function LandingPage() {
             </div>
             
             <Link href="/analyze?path=github" className="w-full relative z-10">
-              <button className="w-full bg-[#ef233c] hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest py-4 rounded-full transition-colors duration-300">
+              <button 
+                type="button"
+                className="w-full bg-[#ef233c] hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest py-4 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
+              >
                 Start Analysis →
               </button>
             </Link>
@@ -620,21 +623,21 @@ export default function LandingPage() {
           {/* Right panel: Quiz Path */}
           <div className="path-card bg-black p-12 md:p-16 hover:bg-[#ff3366]/[0.02] transition-all duration-300 relative overflow-hidden group flex flex-col justify-between min-h-[48vh]">
             {/* Background numeric marker */}
-            <div className="absolute bottom-4 right-4 text-[200px] font-black text-[#ff3366]/[0.02] leading-none select-none font-mono">
+            <div className="absolute bottom-4 right-4 text-[200px] font-black text-[#ff3366]/[0.02] leading-none select-none font-mono" aria-hidden="true">
               02
             </div>
 
             <div className="relative z-10">
-              <div className="text-4xl mb-6 select-none">🌱</div>
+              <div className="text-4xl mb-6 select-none" aria-hidden="true">🌱</div>
               <h3 className="text-4xl font-black font-manrope text-white mb-4">I'm New to Tech</h3>
-              <p className="text-white/40 text-sm mb-8 max-w-xs font-light">
+              <p className="text-white/70 text-sm mb-8 max-w-xs font-light">
                 No repositories? Complete an 8-question interests survey to unlock personality role matching.
               </p>
 
               <div className="space-y-3.5 mb-8">
                 {['8-question career interest quiz', 'Personality-based role matching', 'Beginner-friendly roadmap', 'First steps you can take today'].map((bullet, index) => (
-                  <div key={index} className="flex items-center gap-2.5 text-xs text-white/50 font-mono">
-                    <span className="text-[#ff3366]">→</span>
+                  <div key={index} className="flex items-center gap-2.5 text-xs text-white/75 font-mono">
+                    <span className="text-[#ff3366]" aria-hidden="true">→</span>
                     <span>{bullet}</span>
                   </div>
                 ))}
@@ -642,7 +645,10 @@ export default function LandingPage() {
             </div>
 
             <Link href="/analyze?path=quiz" className="w-full relative z-10">
-              <button className="w-full border border-[#ff3366]/30 bg-[#ff3366]/5 hover:bg-[#ff3366]/20 text-white font-bold text-xs uppercase tracking-widest py-4 rounded-full transition-colors duration-300 shadow-[0_0_15px_rgba(255,51,102,0.1)]">
+              <button 
+                type="button"
+                className="w-full border border-[#ff3366]/30 bg-[#ff3366]/5 hover:bg-[#ff3366]/20 text-white font-bold text-xs uppercase tracking-widest py-4 rounded-full transition-colors duration-300 shadow-[0_0_15px_rgba(255,51,102,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3366]"
+              >
                 Take the Quiz →
               </button>
             </Link>
@@ -662,7 +668,7 @@ export default function LandingPage() {
           ].map((item, idx) => (
             <div key={idx}>
               <div className="font-mono text-4xl font-black text-[#ef233c]">{item.val}</div>
-              <div className="text-white/30 text-[10px] mt-1.5 uppercase tracking-widest font-mono">{item.label}</div>
+              <div className="text-white/60 text-[10px] mt-1.5 uppercase tracking-widest font-mono">{item.label}</div>
             </div>
           ))}
         </div>
@@ -678,25 +684,26 @@ export default function LandingPage() {
             Ready to find your<br />
             <span className="text-electric">career path?</span>
           </h2>
-          <p className="text-white/40 text-lg mb-10 max-w-md mx-auto font-light leading-relaxed font-manrope">
+          <p className="text-white/75 text-lg mb-10 max-w-md mx-auto font-light leading-relaxed font-manrope">
             Scan your repositories or evaluate interests. No signup required.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/analyze">
+            <Link href="/analyze?path=github">
               <button
+                type="button"
                 ref={magneticCta}
                 data-magnetic
-                className="shiny-cta group"
+                className="shiny-cta group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
               >
                 <span className="relative z-10 flex items-center gap-2 text-white font-medium">
-                  Start Free Analysis <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  Start Free Analysis <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </span>
               </button>
             </Link>
           </div>
 
-          <div className="mt-6 flex justify-center gap-2 text-white/20 text-xs font-mono tracking-wider uppercase">
+          <div className="mt-6 flex justify-center gap-2 text-white/60 text-xs font-mono tracking-wider uppercase">
             <span>Free to use</span>
             <span>•</span>
             <span>No Signup</span>
@@ -710,23 +717,23 @@ export default function LandingPage() {
       <footer className="pt-24 pb-8 max-w-[1440px] mx-auto px-8 lg:px-12 relative z-20">
         
         {/* Huge stroked background footer text */}
-        <div className="flex justify-center items-center py-10 opacity-10 pointer-events-none select-none">
+        <div className="flex justify-center items-center py-10 opacity-10 pointer-events-none select-none" aria-hidden="true">
           <h1 className="text-[15vw] leading-none font-bold font-manrope tracking-tighter text-stroke select-none">DEVLENS</h1>
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-6 border-t border-zinc-900 pt-8 mt-8">
           <div className="flex items-baseline gap-2">
             <span className="text-base font-black text-white tracking-wider font-manrope">DevLens AI</span>
-            <span className="text-white/20 text-xs font-mono tracking-widest">v1.0</span>
+            <span className="text-white/60 text-xs font-mono tracking-widest">v1.0</span>
           </div>
           
-          <div className="flex gap-6 text-white/40 text-xs font-mono">
+          <div className="flex gap-6 text-white/70 text-xs font-mono">
             <a href="#" className="hover:text-white transition-colors">Twitter</a>
             <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
             <a href="#" className="hover:text-white transition-colors">GitHub</a>
           </div>
 
-          <div className="text-white/20 text-xs font-mono tracking-wider">
+          <div className="text-white/60 text-xs font-mono tracking-wider">
             BUILT WITH GEMINI 1.5 FLASH API + GITHUB API
           </div>
         </div>
