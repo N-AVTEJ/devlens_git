@@ -383,12 +383,12 @@ export default function LandingPage() {
                 key={idx}
                 className="problem-card py-8 flex gap-6 group hover:bg-white/[0.015] px-4 -mx-4 transition-colors duration-300 rounded-none border-t border-transparent"
               >
-                <div className="font-mono text-white/20 text-sm w-8 flex-shrink-0 mt-1 group-hover:text-[#ef233c] transition-colors">
+                <div className="font-mono text-white/40 text-sm w-8 flex-shrink-0 mt-1 group-hover:text-[#ef233c] transition-colors">
                   0{idx + 1}
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white mb-2">{prob.title}</h3>
-                  <p className="text-white/40 text-sm leading-relaxed font-light">{prob.desc}</p>
+                  <p className="text-white/70 text-sm leading-relaxed font-light">{prob.desc}</p>
                 </div>
               </div>
             ))}
@@ -421,7 +421,7 @@ export default function LandingPage() {
           <div className="md:col-span-7 relative">
             
             {/* SVG Connecting Tracing Line (Desktop Only) */}
-            <div className="absolute left-[38px] top-12 bottom-12 w-0.5 pointer-events-none hidden md:block z-0">
+            <div className="absolute left-[38px] top-12 bottom-12 w-0.5 pointer-events-none hidden md:block z-0" aria-hidden="true">
               <svg 
                 className="absolute inset-0 w-4 h-full pointer-events-none"
                 style={{ overflow: 'visible' }}
@@ -458,12 +458,12 @@ export default function LandingPage() {
                 key={idx}
                 className="step-item flex gap-8 mb-16 last:mb-0 group relative z-10"
               >
-                <div className="font-mono text-[clamp(64px,10vw,96px)] font-black text-white/5 leading-none select-none flex-shrink-0 w-24 md:w-32 group-hover:text-[#ef233c]/10 transition-colors duration-300">
+                <div className="font-mono text-[clamp(64px,10vw,96px)] font-black text-white/10 leading-none select-none flex-shrink-0 w-24 md:w-32 group-hover:text-[#ef233c]/20 transition-colors duration-300" aria-hidden="true">
                   0{idx + 1}
                 </div>
                 <div className="pt-4 border-l border-white/10 pl-8 flex-1">
                   <h3 className="text-2xl font-bold mb-3 text-white">{step.title}</h3>
-                  <p className="text-white/40 text-sm leading-relaxed font-light">{step.desc}</p>
+                  <p className="text-white/70 text-sm leading-relaxed font-light">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -499,26 +499,26 @@ export default function LandingPage() {
                 <h3 className="text-4xl font-black font-manrope tracking-tight mb-4 text-white">
                   GitHub Analysis
                 </h3>
-                <p className="text-white/40 text-lg leading-relaxed font-light">
+                <p className="text-white/70 text-lg leading-relaxed font-light">
                   Every repository. Every language. Every commit pattern. We scan it all and translate it directly into real-time career intelligence.
                 </p>
               </div>
               
               {/* Mini Terminal Preview Widget */}
               <div className="terminal p-5 w-full lg:w-80 flex-shrink-0 bg-black border border-[#ef233c]/20 shadow-[0_0_30px_rgba(239,35,60,0.04)]">
-                <div className="flex gap-1.5 mb-4 select-none">
+                <div className="flex gap-1.5 mb-4 select-none" aria-hidden="true">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#ff3366]/60" />
                   <span className="w-2.5 h-2.5 rounded-full bg-[#ff9f1c]/60" />
                   <span className="w-2.5 h-2.5 rounded-full bg-[#ef233c]/60" />
                 </div>
                 <div className="font-mono text-[11px] space-y-1.5">
-                  <div className="text-white/30">$ devlens analyze N-AVTEJ</div>
+                  <div className="text-white/60">$ devlens analyze N-AVTEJ</div>
                   <div className="text-[#ef233c]">✓ Found 14 repositories</div>
                   <div className="text-[#ef233c]">✓ TypeScript: 591,694 bytes</div>
                   <div className="text-[#ef233c]">✓ JavaScript: 349,578 bytes</div>
-                  <div className="text-white/30">▶ Detecting role...</div>
+                  <div className="text-white/60">▶ Detecting role...</div>
                   <div className="text-[#ff9f1c]">→ Frontend Developer: 87%</div>
-                  <div className="flex items-center gap-1 text-white/30">
+                  <div className="flex items-center gap-1 text-white/60">
                     <span>Generating roadmap</span>
                     <span className="animate-[blink_1s_infinite] text-[#ef233c]">_</span>
                   </div>
@@ -556,9 +556,9 @@ export default function LandingPage() {
                 className="feature-card card-glow p-8 flex flex-col justify-between min-h-[240px] rounded-none"
               >
                 <div>
-                  <div className="text-3xl mb-4 select-none">{item.icon}</div>
+                  <div className="text-3xl mb-4 select-none" aria-hidden="true">{item.icon}</div>
                   <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
-                  <p className="text-white/40 text-sm leading-relaxed font-light">{item.desc}</p>
+                  <p className="text-white/70 text-sm leading-relaxed font-light">{item.desc}</p>
                 </div>
                 <div className="mt-6 font-mono text-xs text-[#ef233c] uppercase tracking-widest">{item.stat}</div>
               </motion.div>
