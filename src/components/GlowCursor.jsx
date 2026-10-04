@@ -8,6 +8,7 @@ export default function GlowCursor() {
   const [ripples, setRipples] = useState([])
   const [sparks, setSparks] = useState([])
   const [isMobile, setIsMobile] = useState(true)
+  const [reducedMotion, setReducedMotion] = useState(false)
 
   // Cursor coordinates
   const cursorX = useMotionValue(-100)
@@ -42,13 +43,20 @@ export default function GlowCursor() {
   const scaleY = useTransform(speedSpring, [0, 6], [1, 0.5])
 
   useEffect(() => {
-    // Hide on mobile / touch devices
+    // Hide on mobile / touch devices or when user prefers reduced motion
     const mobileCheck = window.matchMedia('(hover: none)').matches
+    const motionCheck = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     setIsMobile(mobileCheck)
+    setReducedMotion(motionCheck)
+
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const handleMotionChange = (e) => setReducedMotion(e.matches)
+    motionQuery.addEventListener?.('change', handleMotionChange)
+    return () => motionQuery.removeEventListener?.('change', handleMotionChange)
   }, [])
 
   useEffect(() => {
-    if (isMobile) return
+    if (isMobile || reducedMotion) return
 
     // Track mouse coordinates, velocity, and calculate magnetic vector pulls
     const handleMove = (e) => {
