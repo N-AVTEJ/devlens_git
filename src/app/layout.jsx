@@ -1,7 +1,6 @@
 import { Inter, JetBrains_Mono, Manrope } from 'next/font/google'
 import './globals.css'
-import GlowCursor from '../components/GlowCursor'
-import BackgroundGlobe3D from '../components/BackgroundGlobe3D'
+import ClientVisuals from '../components/ClientVisuals'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -27,11 +26,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${manrope.variable}`}>
       <body className="bg-black text-white font-sans antialiased min-h-screen relative">
-        {/* Global 3D Globe — fixed behind all pages, moves on scroll */}
-        <div className="fixed inset-0 z-[1] pointer-events-none opacity-40">
-          <BackgroundGlobe3D />
-        </div>
-        <GlowCursor />
+        <ClientVisuals />
         {children}
       </body>
     </html>
