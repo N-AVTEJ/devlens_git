@@ -278,25 +278,27 @@ export default function Dashboard({ data, onBack }) {
             >
               {/* Terminal Window Header */}
               <div className="bg-[#050505] border-b border-white/5 px-4 py-2.5 flex items-center justify-between">
-                <div className="flex gap-1.5 select-none">
+                <div className="flex gap-1.5 select-none" aria-hidden="true">
                   <span className="w-2 h-2 rounded-full bg-[#ff3366]/60" />
                   <span className="w-2 h-2 rounded-full bg-[#ff9f1c]/60" />
                   <span className="w-2 h-2 rounded-full bg-[#ef233c]/60" />
                 </div>
-                <span className="text-white/30 text-[10px] font-mono tracking-wider">
+                <span className="text-white/60 text-[10px] font-mono tracking-wider">
                   recruiter-critique.log
                 </span>
                 
                 {/* Micro Toggle triggers */}
                 <button
+                  type="button"
                   onClick={() => setRoastMode(!roastMode)}
-                  className={`flex items-center gap-2 px-3 py-1.5 border font-mono text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
+                  aria-label={roastMode ? "Deactivate roast mode" : "Activate roast mode"}
+                  className={`flex items-center gap-2 px-3 py-1.5 border font-mono text-[10px] uppercase tracking-wider transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c] ${
                     roastMode 
                       ? 'border-[#ff9f1c]/30 bg-[#ff9f1c]/10 text-[#ff9f1c] hover:bg-[#ff9f1c]/20 shadow-[0_0_10px_rgba(255,159,28,0.15)]' 
                       : 'border-[#ef233c]/30 bg-[#ef233c]/10 text-[#ef233c] hover:bg-[#ef233c]/20 shadow-[0_0_10px_rgba(239,35,60,0.15)]'
                   }`}
                 >
-                  <motion.svg width="12" height="12" viewBox="0 0 24 24" className="shrink-0">
+                  <motion.svg width="12" height="12" viewBox="0 0 24 24" className="shrink-0" aria-hidden="true">
                     <motion.path
                       d={roastMode ? flameIcon : briefcaseIcon}
                       fill={roastMode ? '#ff9f1c' : '#ef233c'}
@@ -312,7 +314,7 @@ export default function Dashboard({ data, onBack }) {
               {/* Terminal Window Body */}
               <div className="bg-black p-5 font-mono text-xs leading-relaxed min-h-[160px] flex flex-col justify-between">
                 <div>
-                  <span className="text-[#ef233c] mr-2 select-none">&gt;_</span>
+                  <span className="text-[#ef233c] mr-2 select-none" aria-hidden="true">&gt;_</span>
                   <AnimatePresence mode="wait">
                     <motion.span
                       key={roastMode ? 'roast' : 'pro'}
@@ -320,14 +322,14 @@ export default function Dashboard({ data, onBack }) {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -2 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                      className={roastMode ? 'text-[#ff9f1c]' : 'text-white/70'}
+                      className={roastMode ? 'text-[#ff9f1c]' : 'text-white/85'}
                     >
                       {roastMode ? recruiterFeedback.roast : recruiterFeedback.professional}
                     </motion.span>
                   </AnimatePresence>
-                  <span className="animate-[blink_1s_infinite] text-[#ef233c] ml-0.5">_</span>
+                  <span className="animate-[blink_1s_infinite] text-[#ef233c] ml-0.5" aria-hidden="true">_</span>
                 </div>
-                <div className="text-white/15 text-[9px] tracking-widest uppercase mt-4">
+                <div className="text-white/50 text-[9px] tracking-widest uppercase mt-4">
                   critical recruiter review logic locked
                 </div>
               </div>
@@ -339,11 +341,11 @@ export default function Dashboard({ data, onBack }) {
               className="card-glow p-6 rounded-none flex flex-col justify-between"
             >
               <div>
-                <span className="font-mono text-xs text-white/30 uppercase tracking-widest block mb-6">
+                <span className="font-mono text-xs text-white/60 uppercase tracking-widest block mb-6">
                   Skills Matrix
                 </span>
                 
-                <div className="grid grid-cols-2 gap-4 divide-x divide-white/5">
+                <div className="grid grid-cols-2 gap-4 divide-x divide-white/10">
                   {/* Detected Column */}
                   <div className="pr-2">
                     <span className="text-[#ef233c] font-mono text-[10px] uppercase tracking-wider block mb-4">
@@ -352,12 +354,12 @@ export default function Dashboard({ data, onBack }) {
                     <div className="space-y-2">
                       {detectedSkills.length > 0 ? (
                         detectedSkills.slice(0, 5).map((skill, idx) => (
-                          <div key={idx} className="font-mono text-[11px] text-white/60 truncate">
+                          <div key={idx} className="font-mono text-[11px] text-white/80 truncate">
                             → {skill}
                           </div>
                         ))
                       ) : (
-                        <div className="text-white/20 text-xs italic font-mono">none</div>
+                        <div className="text-white/40 text-xs italic font-mono">none</div>
                       )}
                     </div>
                   </div>
@@ -370,12 +372,12 @@ export default function Dashboard({ data, onBack }) {
                     <div className="space-y-2">
                       {missingSkills.length > 0 ? (
                         missingSkills.slice(0, 5).map((skill, idx) => (
-                          <div key={idx} className="font-mono text-[11px] text-white/35 truncate">
+                          <div key={idx} className="font-mono text-[11px] text-white/75 truncate">
                             ✗ {skill}
                           </div>
                         ))
                       ) : (
-                        <div className="text-white/20 text-xs italic font-mono">none</div>
+                        <div className="text-white/40 text-xs italic font-mono">none</div>
                       )}
                     </div>
                   </div>
@@ -393,15 +395,15 @@ export default function Dashboard({ data, onBack }) {
                 {...cardTransition(3)}
                 className="card-glow p-6 rounded-none"
               >
-                <span className="font-mono text-xs text-white/30 uppercase tracking-widest block mb-4">
+                <span className="font-mono text-xs text-white/60 uppercase tracking-widest block mb-4">
                   Industry Benchmarks
                 </span>
                 <div className="space-y-4">
                   {benchmarks.slice(0, 3).map((bench, idx) => (
                     <div key={idx}>
                       <div className="flex justify-between items-center text-xs font-mono mb-1.5">
-                        <span className="text-white/80">{bench.skill}</span>
-                        <span className="text-white/30">{bench.label}</span>
+                        <span className="text-white/90">{bench.skill}</span>
+                        <span className="text-white/65">{bench.label}</span>
                       </div>
                       <div className="w-full bg-white/5 h-0.5 overflow-hidden">
                         <motion.div
@@ -424,7 +426,7 @@ export default function Dashboard({ data, onBack }) {
               {...cardTransition(5)}
               className="card-glow p-6 rounded-none"
             >
-              <span className="font-mono text-xs text-white/30 uppercase tracking-widest block mb-6">
+              <span className="font-mono text-xs text-white/60 uppercase tracking-widest block mb-6">
                 Readiness Breakdown
               </span>
               <div className="grid grid-cols-2 gap-4">
@@ -435,7 +437,7 @@ export default function Dashboard({ data, onBack }) {
                   { name: 'Documentation', val: readinessBreakdown.documentation || 50 }
                 ].map((item, idx) => (
                   <div key={idx} className="bg-[#080808] border border-white/5 p-4 rounded-none flex flex-col justify-between">
-                    <span className="text-white/30 text-[9px] font-mono uppercase tracking-wider block mb-1">
+                    <span className="text-white/65 text-[9px] font-mono uppercase tracking-wider block mb-1">
                       {item.name}
                     </span>
                     <div>
@@ -458,14 +460,14 @@ export default function Dashboard({ data, onBack }) {
             {...cardTransition(7)}
             className="bg-[#080808] border-y border-[#ef233c]/10 px-8 py-6 flex gap-4 items-start select-none rounded-none"
           >
-            <div className="font-mono text-xs border border-[#ef233c]/20 p-2 text-[#ef233c] shrink-0 bg-black">
+            <div className="font-mono text-xs border border-[#ef233c]/20 p-2 text-[#ef233c] shrink-0 bg-black" aria-hidden="true">
               💡
             </div>
             <div>
               <span className="font-mono text-[9px] text-[#ef233c] uppercase tracking-widest block mb-1">
                 Market Intelligence Insight
               </span>
-              <p className="text-white/45 text-xs italic font-light leading-relaxed">
+              <p className="text-white/75 text-xs italic font-light leading-relaxed">
                 "{marketInsight}"
               </p>
             </div>
@@ -482,7 +484,7 @@ export default function Dashboard({ data, onBack }) {
             className="card-glow p-6 sticky top-24 shadow-2xl flex flex-col justify-between rounded-none z-10"
           >
             <div>
-              <span className="font-mono text-xs text-white/30 uppercase tracking-widest block mb-1">
+              <span className="font-mono text-xs text-white/60 uppercase tracking-widest block mb-1">
                 Personalized Roadmap
               </span>
               <div className="text-lg font-bold text-[#ef233c] mb-6 font-mono tracking-tight">
@@ -499,19 +501,19 @@ export default function Dashboard({ data, onBack }) {
                       <div className={`absolute -left-[32px] top-1.5 w-3.5 h-3.5 rounded-full flex items-center justify-center font-mono text-[9px] ${
                         isFirst 
                           ? 'bg-[#ef233c] border border-[#ef233c] text-white font-bold animate-[pulse-glow_2s_infinite]' 
-                          : 'bg-[#080808] border border-white/20 text-white/40'
+                          : 'bg-[#080808] border border-white/20 text-white/70'
                       }`}>
                         {idx + 1}
                       </div>
 
                       <div>
-                        <span className="font-mono text-[9px] text-white/20 uppercase block tracking-wider mb-0.5">
+                        <span className="font-mono text-[9px] text-white/60 uppercase block tracking-wider mb-0.5">
                           Month {idx + 1} — {monthData.month || 'Target'}
                         </span>
                         <h4 className="text-sm font-semibold text-white leading-snug font-manrope">
                           {monthData.goal}
                         </h4>
-                        <p className="text-[10px] text-[#ef233c]/50 font-mono mt-0.5">
+                        <p className="text-[10px] text-[#ef233c]/80 font-mono mt-0.5">
                           Src: {monthData.resource}
                         </p>
                       </div>
@@ -523,9 +525,11 @@ export default function Dashboard({ data, onBack }) {
 
             {/* View Full Roadmap CTA - rounded glowing button */}
             <button
+              type="button"
               onClick={() => window.open(roadmap.roadmapUrl, '_blank')}
+              aria-label={`View full roadmap for ${roadmap.targetRole} on roadmap.sh`}
               data-magnetic
-              className="w-full mt-8 bg-[#ef233c] hover:bg-red-700 text-white font-extrabold text-xs uppercase tracking-widest py-4 rounded-full hover:shadow-[0_0_30px_rgba(239,35,60,0.4)] transition-all duration-300"
+              className="w-full mt-8 bg-[#ef233c] hover:bg-red-700 text-white font-extrabold text-xs uppercase tracking-widest py-4 rounded-full hover:shadow-[0_0_30px_rgba(239,35,60,0.4)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
             >
               View Full Roadmap →
             </button>
@@ -537,7 +541,7 @@ export default function Dashboard({ data, onBack }) {
               {...cardTransition(8)}
               className="card-glow p-5 rounded-none"
             >
-              <span className="font-mono text-xs text-white/30 uppercase tracking-widest block mb-4">
+              <span className="font-mono text-xs text-white/60 uppercase tracking-widest block mb-4">
                 👣 Your First Steps
               </span>
               <div className="space-y-4">
@@ -546,7 +550,7 @@ export default function Dashboard({ data, onBack }) {
                     <span className="font-mono text-[10px] bg-[#ef233c]/10 border border-[#ef233c]/20 text-[#ef233c] w-5 h-5 rounded-none flex items-center justify-center shrink-0 mt-0.5 font-bold">
                       {idx + 1}
                     </span>
-                    <p className="text-white/70 text-xs leading-relaxed font-light">{step}</p>
+                    <p className="text-white/85 text-xs leading-relaxed font-light">{step}</p>
                   </div>
                 ))}
               </div>
@@ -558,12 +562,14 @@ export default function Dashboard({ data, onBack }) {
             {...cardTransition(9)}
             className="card-glow p-5 rounded-none"
           >
-            <span className="font-mono text-xs text-white/30 uppercase tracking-widest block mb-3">
+            <span className="font-mono text-xs text-white/60 uppercase tracking-widest block mb-3">
               Metadata Distribution
             </span>
             <button
+              type="button"
               onClick={handleShare}
-              className="w-full border border-white/10 text-white font-mono text-xs uppercase tracking-wider py-3 rounded-full hover:bg-white hover:text-black transition-colors duration-300"
+              aria-label="Export career report card as image"
+              className="w-full border border-white/10 text-white font-mono text-xs uppercase tracking-wider py-3 rounded-full hover:bg-white hover:text-black transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
             >
               📤 Export Career Card
             </button>
