@@ -62,7 +62,15 @@ export function useQuizAnalysis() {
     }
   };
 
-  return { loading, error, result, scanStep, scanMessages, loadingPhase, submit };
+  const reset = () => {
+    setLoading(false);
+    setLoadingPhase('done');
+    setError(null);
+    setResult(null);
+    setScanStep(0);
+  };
+
+  return { loading, error, result, scanStep, scanMessages, loadingPhase, submit, reset };
 }
 
 export default useQuizAnalysis;

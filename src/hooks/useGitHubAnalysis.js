@@ -86,7 +86,15 @@ export function useGitHubAnalysis() {
     }
   };
 
-  return { loading, error, result, scanStep, scanMessages, loadingPhase, analyze };
+  const reset = () => {
+    setLoading(false);
+    setLoadingPhase('done');
+    setError(null);
+    setResult(null);
+    setScanStep(0);
+  };
+
+  return { loading, error, result, scanStep, scanMessages, loadingPhase, analyze, reset };
 }
 
 export default useGitHubAnalysis;

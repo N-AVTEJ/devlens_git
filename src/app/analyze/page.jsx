@@ -44,6 +44,8 @@ function AnalyzeContent() {
   }
 
   const goBack = () => {
+    githubAnalysis.reset?.()
+    quizAnalysis.reset?.()
     if (result) {
       setResult(null)
       return
