@@ -1,3 +1,5 @@
+import { validateAndNormalizeRoadmap, ROADMAP_URLS } from '../data/roadmapRegistry';
+
 const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
     return window.location.origin;
@@ -121,6 +123,11 @@ Return this exact structure:
         roast: parsed.roast || ''
       };
     }
+
+    if (parsed) {
+      parsed.roadmap = validateAndNormalizeRoadmap(parsed.roadmap);
+    }
+
     return parsed;
   } catch (error) {
     console.error('Error parsing Gemini response:', error);

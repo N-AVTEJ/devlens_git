@@ -40,9 +40,15 @@ export async function POST(req) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey)
-    const generationConfig = { responseMimeType: 'application/json' }
+    const generationConfig = {
+      responseMimeType: 'application/json',
+      temperature: 0.1,
+      topP: 0.8,
+      topK: 20,
+    }
     let text = ''
 
+    // Note: gemini-3.8-flash may not be a valid model ID — verify against the current Gemini API model list before deploying; if invalid, remove it from the fallback chain entirely so we don't waste a failed round-trip on every single request.
     try {
       const model = genAI.getGenerativeModel({ model: 'gemini-3.8-flash', generationConfig })
       const result = await model.generateContent(prompt)
