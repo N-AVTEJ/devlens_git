@@ -7,10 +7,15 @@ import * as THREE from 'three'
 function GlobeMesh() {
   const groupRef = useRef()
   const scrollRef = useRef(0)
+  const prefersReducedMotion = useRef(false)
 
   useEffect(() => {
+    prefersReducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
     const handleScroll = () => {
-      scrollRef.current = window.scrollY
+      if (!prefersReducedMotion.current) {
+        scrollRef.current = window.scrollY
+      }
     }
     // Set passive scroll listener for optimal scroll performance
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -18,6 +23,7 @@ function GlobeMesh() {
   }, [])
 
   useFrame((state) => {
+    if (prefersReducedMotion.current) return
     const t = state.clock.getElapsedTime()
     if (groupRef.current) {
       // Steady background rotation combined with scroll-induced velocity rotation
@@ -76,7 +82,7 @@ function GlobeMesh() {
 
 export default function BackgroundGlobe3D() {
   return (
-    <div className="w-full h-full relative" style={{ contain: 'paint', pointerEvents: 'none' }}>
+    <div className="w-full h-full relative" style={{ contain: 'paint', pointerEvents: 'none' }} aria-hidden="true" role="presentation">
       <Canvas 
         camera={{ position: [0, 0, 5], fov: 50 }}
         gl={{ antialias: true, alpha: true }}
