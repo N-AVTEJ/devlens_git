@@ -430,10 +430,10 @@ export default function LandingPage() {
         id="features"
         className="features-section py-32 border-t border-white/10 max-w-[1440px] mx-auto px-6 lg:px-12 relative z-20"
       >
-        <div className="mb-16">
-          <div className="font-mono text-[#ef233c] text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
+        <div className="mb-16 section-header-reveal">
+          <div className="font-mono text-[#ef233c] text-[10px] tracking-[0.22em] uppercase mb-4 flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-[#ef233c]" />
-            CAPABILITY // 003
+            [CAPABILITY_REGISTRY]
           </div>
           <h2 className="text-4xl lg:text-5xl font-black font-manrope tracking-tight text-white leading-tight">
             Developer intelligence engine.
@@ -565,10 +565,10 @@ export default function LandingPage() {
         id="paths"
         className="paths-section py-32 border-t border-white/10 max-w-[1440px] mx-auto px-6 lg:px-12 relative z-20"
       >
-        <div className="mb-16">
-          <div className="font-mono text-[#ef233c] text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
+        <div className="mb-16 section-header-reveal">
+          <div className="font-mono text-[#ef233c] text-[10px] tracking-[0.22em] uppercase mb-4 flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-[#ef233c]" />
-            VECTOR_SELECT // 004
+            [INGESTION_TERMINALS]
           </div>
           <h2 className="text-4xl lg:text-5xl font-black font-manrope tracking-tight text-white leading-none">
             Choose your entry terminal.
@@ -595,15 +595,15 @@ export default function LandingPage() {
 
               <div className="space-y-3 mb-8 font-mono text-xs text-white/70">
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ef233c]">→</span>
+                  <span className="text-[#ef233c]">●</span>
                   <span>Instant scan of all public repositories</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ef233c]">→</span>
+                  <span className="text-[#ef233c]">●</span>
                   <span>Multi-vector skill radar breakdown</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ef233c]">→</span>
+                  <span className="text-[#ef233c]">●</span>
                   <span>Verified roadmap.sh career match</span>
                 </div>
               </div>
@@ -614,7 +614,7 @@ export default function LandingPage() {
                 type="button"
                 className="w-full py-4 bg-[#ef233c] hover:bg-red-700 text-white font-mono text-xs font-bold uppercase tracking-widest rounded-none transition-colors duration-200 shadow-[0_0_20px_rgba(239,35,60,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
               >
-                Launch GitHub Scanner →
+                Launch GitHub Scanner
               </button>
             </Link>
           </div>
@@ -638,15 +638,15 @@ export default function LandingPage() {
 
               <div className="space-y-3 mb-8 font-mono text-xs text-white/70">
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ff3366]">→</span>
+                  <span className="text-[#ff3366]">●</span>
                   <span>8-question career aptitude model</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ff3366]">→</span>
+                  <span className="text-[#ff3366]">●</span>
                   <span>Psychometric tech role correlation</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ff3366]">→</span>
+                  <span className="text-[#ff3366]">●</span>
                   <span>Beginner-friendly curriculum whitelist</span>
                 </div>
               </div>
@@ -657,7 +657,7 @@ export default function LandingPage() {
                 type="button"
                 className="w-full py-4 border border-[#ff3366]/40 bg-[#ff3366]/10 hover:bg-[#ff3366]/20 text-white font-mono text-xs font-bold uppercase tracking-widest rounded-none transition-colors duration-200 shadow-[0_0_20px_rgba(255,51,102,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3366]"
               >
-                Begin Heuristics Quiz →
+                Begin Heuristics Quiz
               </button>
             </Link>
           </div>
@@ -687,7 +687,7 @@ export default function LandingPage() {
                 className="shiny-cta group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
               >
                 <span className="relative z-10 flex items-center gap-2 text-white font-medium text-sm">
-                  Commence Analysis <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+                  Commence Analysis
                 </span>
               </button>
             </Link>
