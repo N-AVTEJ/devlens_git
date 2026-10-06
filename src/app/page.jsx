@@ -84,69 +84,66 @@ export default function LandingPage() {
       '-=0.3'
     )
 
-    // Problem cards scroll trigger
-    gsap.fromTo('.problem-card',
-      { y: 40, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.7,
-        stagger: 0.12,
-        ease: 'power3.out',
+    // Hero Scroll-Out Parallax (smooth spatial departure into the scanner)
+    if (heroRef.current) {
+      gsap.to('.hero-text-col', {
+        y: -70,
+        opacity: 0.2,
+        ease: 'none',
         scrollTrigger: {
-          trigger: '.problem-section',
-          start: 'top 75%',
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.8,
         }
-      }
-    )
+      })
 
-    // Feature cards cascade
-    gsap.fromTo('.feature-card',
-      { y: 40, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'power2.out',
+      gsap.to('.hero-card-col', {
+        y: -35,
+        scale: 0.94,
+        opacity: 0.3,
+        ease: 'none',
         scrollTrigger: {
-          trigger: '.features-section',
-          start: 'top 75%',
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.8,
         }
-      }
-    )
+      })
+    }
 
-    // Path cards entry
-    gsap.fromTo('.path-card',
-      { y: 40, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.paths-section',
-          start: 'top 70%',
+    // Architectural Line Dividers expansion on scroll
+    gsap.utils.toArray('.tech-divider-line').forEach((line) => {
+      gsap.fromTo(line, 
+        { scaleX: 0, transformOrigin: 'left' },
+        {
+          scaleX: 1,
+          duration: 1.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: line,
+            start: 'top 85%',
+          }
         }
-      }
-    )
+      )
+    })
 
-    // CTA section reveal
-    gsap.fromTo('.cta-content',
-      { y: 30, opacity: 0, scale: 0.98 },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.cta-section',
-          start: 'top 80%',
+    // Section title reveals (intentional and quiet, not scattered card bounces)
+    gsap.utils.toArray('.section-header-reveal').forEach((header) => {
+      gsap.fromTo(header,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: header,
+            start: 'top 82%',
+          }
         }
-      }
-    )
+      )
+    })
 
     // Cleanup triggers on unmount
     return () => {
