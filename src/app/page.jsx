@@ -84,66 +84,69 @@ export default function LandingPage() {
       '-=0.3'
     )
 
-    // Hero Scroll-Out Parallax (smooth spatial departure into the scanner)
-    if (heroRef.current) {
-      gsap.to('.hero-text-col', {
-        y: -70,
-        opacity: 0.2,
-        ease: 'none',
+    // Problem cards scroll trigger
+    gsap.fromTo('.problem-card',
+      { y: 40, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        stagger: 0.12,
+        ease: 'power3.out',
         scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.8,
+          trigger: '.problem-section',
+          start: 'top 75%',
         }
-      })
+      }
+    )
 
-      gsap.to('.hero-card-col', {
-        y: -35,
-        scale: 0.94,
-        opacity: 0.3,
-        ease: 'none',
+    // Feature cards cascade
+    gsap.fromTo('.feature-card',
+      { y: 40, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
         scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.8,
+          trigger: '.features-section',
+          start: 'top 75%',
         }
-      })
-    }
+      }
+    )
 
-    // Architectural Line Dividers expansion on scroll
-    gsap.utils.toArray('.tech-divider-line').forEach((line) => {
-      gsap.fromTo(line, 
-        { scaleX: 0, transformOrigin: 'left' },
-        {
-          scaleX: 1,
-          duration: 1.1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: line,
-            start: 'top 85%',
-          }
+    // Path cards entry
+    gsap.fromTo('.path-card',
+      { y: 40, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.paths-section',
+          start: 'top 70%',
         }
-      )
-    })
+      }
+    )
 
-    // Section title reveals (intentional and quiet, not scattered card bounces)
-    gsap.utils.toArray('.section-header-reveal').forEach((header) => {
-      gsap.fromTo(header,
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: header,
-            start: 'top 82%',
-          }
+    // CTA section reveal
+    gsap.fromTo('.cta-content',
+      { y: 30, opacity: 0, scale: 0.98 },
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.cta-section',
+          start: 'top 80%',
         }
-      )
-    })
+      }
+    )
 
     // Cleanup triggers on unmount
     return () => {
@@ -218,7 +221,7 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
           
           {/* Hero text (Col-span 7) */}
-          <div className="hero-text-col lg:col-span-7 flex flex-col justify-center will-change-transform">
+          <div className="lg:col-span-7 flex flex-col justify-center">
             
             {/* Top Badge */}
             <div className="hero-badge self-start mb-6">
@@ -265,7 +268,7 @@ export default function LandingPage() {
                   className="hero-buttons shiny-cta group w-full sm:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
                 >
                   <span className="relative z-10 flex items-center gap-2 text-white font-medium text-sm">
-                    Analyze My GitHub
+                    Analyze My GitHub <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
                   </span>
                 </button>
               </Link>
@@ -297,7 +300,7 @@ export default function LandingPage() {
           </div>
 
           {/* Hero 3D Card Stage (Col-span 5) */}
-          <div className="hero-card-col lg:col-span-5 h-[560px] relative flex items-center justify-center will-change-transform">
+          <div className="lg:col-span-5 h-[560px] relative flex items-center justify-center">
             
             {/* Tech frame corners */}
             <div className="absolute inset-4 border border-white/5 pointer-events-none">
@@ -340,16 +343,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ARCHITECTURAL STATUS DIVIDER */}
-      <div className="w-full border-y border-white/5 py-3.5 bg-black/70 backdrop-blur-md relative z-20 px-6 lg:px-12 max-w-[1440px] mx-auto flex items-center justify-between font-mono text-[10px] text-white/40">
-        <div className="flex items-center gap-3">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ef233c] animate-pulse" />
-          <span className="text-white/60">SYS_STATUS: CALIBRATING AST TELEMETRY</span>
-        </div>
-        <div className="hidden sm:flex items-center gap-6">
-          <span>PARSER: RECURSIVE SYNTAX GRAPH</span>
-          <span>COEFFICIENT: DETERMINISTIC</span>
-          <span className="text-[#ef233c]">60FPS SCRUB ACTIVE</span>
+      {/* TICKER / MARQUEE TRANSITION BANNER */}
+      <div className="w-full overflow-hidden border-y border-white/10 py-3 bg-[#080202] relative z-20">
+        <div className="marquee-inner flex select-none">
+          {Array.from({ length: 3 }).map((_, repeatIdx) => (
+            <span key={repeatIdx} className="font-mono text-xs text-white/40 tracking-[0.25em] uppercase mr-6 whitespace-nowrap">
+              AST TOPOLOGY ANALYSIS  ◆  NEURAL SKILL PROJECTION  ◆  RADAR CALIBRATION  ◆  UNFILTERED RECRUITER CRITIQUE  ◆  VERIFIED ROADMAP WHITELIST  ◆  
+            </span>
+          ))}
         </div>
       </div>
 
@@ -363,10 +364,10 @@ export default function LandingPage() {
           
           {/* Left Column: Context Header */}
           <div className="lg:col-span-5">
-            <div className="sticky top-28 self-start section-header-reveal">
-              <div className="font-mono text-[#ef233c] text-[10px] tracking-[0.22em] uppercase mb-4 flex items-center gap-2">
+            <div className="sticky top-28 self-start">
+              <div className="font-mono text-[#ef233c] text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-[#ef233c]" />
-                [ENGINEERING_DIAGNOSTIC]
+                DIAGNOSTIC // 001
               </div>
               <h2 className="text-4xl lg:text-5xl font-black font-manrope tracking-tight leading-[1.05] text-white mb-6">
                 The developer<br />
@@ -430,10 +431,10 @@ export default function LandingPage() {
         id="features"
         className="features-section py-32 border-t border-white/10 max-w-[1440px] mx-auto px-6 lg:px-12 relative z-20"
       >
-        <div className="mb-16 section-header-reveal">
-          <div className="font-mono text-[#ef233c] text-[10px] tracking-[0.22em] uppercase mb-4 flex items-center gap-2">
+        <div className="mb-16">
+          <div className="font-mono text-[#ef233c] text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-[#ef233c]" />
-            [CAPABILITY_REGISTRY]
+            CAPABILITY // 003
           </div>
           <h2 className="text-4xl lg:text-5xl font-black font-manrope tracking-tight text-white leading-tight">
             Developer intelligence engine.
@@ -565,10 +566,10 @@ export default function LandingPage() {
         id="paths"
         className="paths-section py-32 border-t border-white/10 max-w-[1440px] mx-auto px-6 lg:px-12 relative z-20"
       >
-        <div className="mb-16 section-header-reveal">
-          <div className="font-mono text-[#ef233c] text-[10px] tracking-[0.22em] uppercase mb-4 flex items-center gap-2">
+        <div className="mb-16">
+          <div className="font-mono text-[#ef233c] text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-[#ef233c]" />
-            [INGESTION_TERMINALS]
+            VECTOR_SELECT // 004
           </div>
           <h2 className="text-4xl lg:text-5xl font-black font-manrope tracking-tight text-white leading-none">
             Choose your entry terminal.
@@ -595,15 +596,15 @@ export default function LandingPage() {
 
               <div className="space-y-3 mb-8 font-mono text-xs text-white/70">
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ef233c]">●</span>
+                  <span className="text-[#ef233c]">→</span>
                   <span>Instant scan of all public repositories</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ef233c]">●</span>
+                  <span className="text-[#ef233c]">→</span>
                   <span>Multi-vector skill radar breakdown</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ef233c]">●</span>
+                  <span className="text-[#ef233c]">→</span>
                   <span>Verified roadmap.sh career match</span>
                 </div>
               </div>
@@ -614,7 +615,7 @@ export default function LandingPage() {
                 type="button"
                 className="w-full py-4 bg-[#ef233c] hover:bg-red-700 text-white font-mono text-xs font-bold uppercase tracking-widest rounded-none transition-colors duration-200 shadow-[0_0_20px_rgba(239,35,60,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
               >
-                Launch GitHub Scanner
+                Launch GitHub Scanner →
               </button>
             </Link>
           </div>
@@ -638,15 +639,15 @@ export default function LandingPage() {
 
               <div className="space-y-3 mb-8 font-mono text-xs text-white/70">
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ff3366]">●</span>
+                  <span className="text-[#ff3366]">→</span>
                   <span>8-question career aptitude model</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ff3366]">●</span>
+                  <span className="text-[#ff3366]">→</span>
                   <span>Psychometric tech role correlation</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#ff3366]">●</span>
+                  <span className="text-[#ff3366]">→</span>
                   <span>Beginner-friendly curriculum whitelist</span>
                 </div>
               </div>
@@ -657,7 +658,7 @@ export default function LandingPage() {
                 type="button"
                 className="w-full py-4 border border-[#ff3366]/40 bg-[#ff3366]/10 hover:bg-[#ff3366]/20 text-white font-mono text-xs font-bold uppercase tracking-widest rounded-none transition-colors duration-200 shadow-[0_0_20px_rgba(255,51,102,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3366]"
               >
-                Begin Heuristics Quiz
+                Begin Heuristics Quiz →
               </button>
             </Link>
           </div>
@@ -687,7 +688,7 @@ export default function LandingPage() {
                 className="shiny-cta group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
               >
                 <span className="relative z-10 flex items-center gap-2 text-white font-medium text-sm">
-                  Commence Analysis
+                  Commence Analysis <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
                 </span>
               </button>
             </Link>
