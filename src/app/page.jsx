@@ -218,7 +218,7 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
           
           {/* Hero text (Col-span 7) */}
-          <div className="lg:col-span-7 flex flex-col justify-center">
+          <div className="hero-text-col lg:col-span-7 flex flex-col justify-center will-change-transform">
             
             {/* Top Badge */}
             <div className="hero-badge self-start mb-6">
@@ -265,7 +265,7 @@ export default function LandingPage() {
                   className="hero-buttons shiny-cta group w-full sm:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
                 >
                   <span className="relative z-10 flex items-center gap-2 text-white font-medium text-sm">
-                    Analyze My GitHub <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+                    Analyze My GitHub
                   </span>
                 </button>
               </Link>
@@ -297,7 +297,7 @@ export default function LandingPage() {
           </div>
 
           {/* Hero 3D Card Stage (Col-span 5) */}
-          <div className="lg:col-span-5 h-[560px] relative flex items-center justify-center">
+          <div className="hero-card-col lg:col-span-5 h-[560px] relative flex items-center justify-center will-change-transform">
             
             {/* Tech frame corners */}
             <div className="absolute inset-4 border border-white/5 pointer-events-none">
@@ -340,14 +340,16 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* TICKER / MARQUEE TRANSITION BANNER */}
-      <div className="w-full overflow-hidden border-y border-white/10 py-3 bg-[#080202] relative z-20">
-        <div className="marquee-inner flex select-none">
-          {Array.from({ length: 3 }).map((_, repeatIdx) => (
-            <span key={repeatIdx} className="font-mono text-xs text-white/40 tracking-[0.25em] uppercase mr-6 whitespace-nowrap">
-              AST TOPOLOGY ANALYSIS  ◆  NEURAL SKILL PROJECTION  ◆  RADAR CALIBRATION  ◆  UNFILTERED RECRUITER CRITIQUE  ◆  VERIFIED ROADMAP WHITELIST  ◆  
-            </span>
-          ))}
+      {/* ARCHITECTURAL STATUS DIVIDER */}
+      <div className="w-full border-y border-white/5 py-3.5 bg-black/70 backdrop-blur-md relative z-20 px-6 lg:px-12 max-w-[1440px] mx-auto flex items-center justify-between font-mono text-[10px] text-white/40">
+        <div className="flex items-center gap-3">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#ef233c] animate-pulse" />
+          <span className="text-white/60">SYS_STATUS: CALIBRATING AST TELEMETRY</span>
+        </div>
+        <div className="hidden sm:flex items-center gap-6">
+          <span>PARSER: RECURSIVE SYNTAX GRAPH</span>
+          <span>COEFFICIENT: DETERMINISTIC</span>
+          <span className="text-[#ef233c]">60FPS SCRUB ACTIVE</span>
         </div>
       </div>
 
@@ -361,10 +363,10 @@ export default function LandingPage() {
           
           {/* Left Column: Context Header */}
           <div className="lg:col-span-5">
-            <div className="sticky top-28 self-start">
-              <div className="font-mono text-[#ef233c] text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
+            <div className="sticky top-28 self-start section-header-reveal">
+              <div className="font-mono text-[#ef233c] text-[10px] tracking-[0.22em] uppercase mb-4 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-[#ef233c]" />
-                DIAGNOSTIC // 001
+                [ENGINEERING_DIAGNOSTIC]
               </div>
               <h2 className="text-4xl lg:text-5xl font-black font-manrope tracking-tight leading-[1.05] text-white mb-6">
                 The developer<br />
