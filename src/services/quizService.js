@@ -2,9 +2,15 @@ import { validateAndNormalizeRoadmap, ROADMAP_URLS } from '../data/roadmapRegist
 
 const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
-    return window.location.origin;
+    return '';
   }
-  return process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
+  if (process.env.NEXT_PUBLIC_BASE_URL) {
+    return process.env.NEXT_PUBLIC_BASE_URL.replace(/\/$/, '');
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL.replace(/\/$/, '')}`;
+  }
+  return 'http://127.0.0.1:3000';
 };
 
 export async function analyzeQuizAnswers(answers) {

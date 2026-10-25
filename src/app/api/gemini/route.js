@@ -4,10 +4,16 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextResponse } from 'next/server'
 
-function isOriginAllowed(origin, host) {
+export const maxDuration = 60
+export const dynamic = 'force-dynamic'
+
+function isOriginAllowed(origin, req) {
   if (!origin) return true
 
   const originClean = origin.trim().replace(/\/$/, '')
+  const host = req.headers.get('host')
+  const forwardedHost = req.headers.get('x-forwarded-host')
+
   const allowed = new Set([
     'http://localhost:3000',
     'http://127.0.0.1:3000',
@@ -20,25 +26,43 @@ function isOriginAllowed(origin, host) {
     allowed.add(`https://${process.env.VERCEL_URL.trim().replace(/\/$/, '')}`)
     allowed.add(`http://${process.env.VERCEL_URL.trim().replace(/\/$/, '')}`)
   }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    allowed.add(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.trim().replace(/\/$/, '')}`)
+  }
   if (host) {
     const hostClean = host.trim().replace(/\/$/, '')
     allowed.add(`http://${hostClean}`)
     allowed.add(`https://${hostClean}`)
   }
+  if (forwardedHost) {
+    const fHostClean = forwardedHost.trim().replace(/\/$/, '')
+    allowed.add(`http://${fHostClean}`)
+    allowed.add(`https://${fHostClean}`)
+  }
 
-  return allowed.has(originClean)
+  if (allowed.has(originClean)) return true
+
+  try {
+    const url = new URL(originClean)
+    if (url.hostname.endsWith('.vercel.app')) {
+      return true
+    }
+  } catch {
+    // Ignore invalid origin strings
+  }
+
+  return false
 }
 
 function getCorsHeaders(req) {
   const origin = req.headers.get('origin')
-  const host = req.headers.get('host')
 
   const headers = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   }
 
-  if (origin && isOriginAllowed(origin, host)) {
+  if (origin && isOriginAllowed(origin, req)) {
     headers['Access-Control-Allow-Origin'] = origin
     headers['Vary'] = 'Origin'
   }
@@ -48,9 +72,8 @@ function getCorsHeaders(req) {
 
 export async function OPTIONS(req) {
   const origin = req.headers.get('origin')
-  const host = req.headers.get('host')
 
-  if (origin && !isOriginAllowed(origin, host)) {
+  if (origin && !isOriginAllowed(origin, req)) {
     return new Response(null, { status: 403 })
   }
 
@@ -63,9 +86,8 @@ export async function OPTIONS(req) {
 
 export async function POST(req) {
   const origin = req.headers.get('origin')
-  const host = req.headers.get('host')
 
-  if (origin && !isOriginAllowed(origin, host)) {
+  if (origin && !isOriginAllowed(origin, req)) {
     return NextResponse.json({ error: 'Origin not allowed' }, { status: 403 })
   }
 
