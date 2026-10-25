@@ -22,11 +22,7 @@ export default function GlowCursor() {
   const auraX = useSpring(cursorX, { stiffness: 65, damping: 18 })
   const auraY = useSpring(cursorY, { stiffness: 65, damping: 18 })
 
-  // MAGNETIC GRAVITATIONAL PULL WARP OFFSET
-  const cursorPullX = useMotionValue(0)
-  const cursorPullY = useMotionValue(0)
-  const springPullX = useSpring(cursorPullX, { stiffness: 220, damping: 18 })
-  const springPullY = useSpring(cursorPullY, { stiffness: 220, damping: 18 })
+
 
   // VELOCITY & ROTATION FOR PHYSICAL LIQUID STRETCHING
   const lastXRef = useRef(0)
@@ -93,53 +89,23 @@ export default function GlowCursor() {
         lastYRef.current = currentY
         lastTimeRef.current = now
       }
-
-      // Cursor-level Magnetic Pull Attraction & Gravitational Warp (within 90px)
-      let pullX = 0
-      let pullY = 0
-      let minDistance = Infinity
-
-      const magneticElements = document.querySelectorAll('[data-magnetic]')
-      magneticElements.forEach((el) => {
-        const rect = el.getBoundingClientRect()
-        const centerX = rect.left + rect.width / 2
-        const centerY = rect.top + rect.height / 2
-        
-        const distance = Math.hypot(currentX - centerX, currentY - centerY)
-        
-        if (distance < 90) {
-          const dx = currentX - centerX
-          const dy = currentY - centerY
-          // Pull target element by 30% of vector offset distance
-          el.style.transition = 'transform 0.1s ease-out'
-          el.style.transform = `translate(${dx * 0.3}px, ${dy * 0.3}px)`
-          
-          if (distance < minDistance) {
-            minDistance = distance
-            // Set pull displacement vector (pull outer ring towards element center)
-            pullX = -dx * 0.35
-            pullY = -dy * 0.35
-          }
-        } else {
-          // Smooth spring back to standard coordinates
-          el.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-          el.style.transform = 'translate(0px, 0px)'
-        }
-      })
-
-      cursorPullX.set(pullX)
-      cursorPullY.set(pullY)
     }
 
     // Dynamic HMR-friendly hover event delegation
     const handleMouseOver = (e) => {
+      const inputTarget = e.target.closest('input, textarea, select, [contenteditable="true"]')
+      if (inputTarget) {
+        setCursorVariant('hidden')
+        return
+      }
+
       const hoverTarget = e.target.closest('button, a, [data-magnetic]')
       if (hoverTarget) {
         setCursorVariant('hover')
         return
       }
 
-      const textTarget = e.target.closest('p, h1, h2, h3, span, li, code, pre, input, textarea')
+      const textTarget = e.target.closest('p, h1, h2, h3, h4, h5, h6, span, li, code, pre')
       if (textTarget) {
         setCursorVariant('text')
         return
@@ -199,7 +165,7 @@ export default function GlowCursor() {
       window.removeEventListener('mousedown', handleMouseDown)
       window.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [isMobile, cursorX, cursorY, cursorPullX, cursorPullY, speedValue, angleValue])
+  }, [isMobile, cursorX, cursorY, speedValue, angleValue])
 
   // Hide completely on mobile screens
   if (isMobile) return null
@@ -232,6 +198,13 @@ export default function GlowCursor() {
       borderRadius: '2px',
       borderWidth: '1px',
       transition: { type: 'spring', stiffness: 250, damping: 15 }
+    },
+    hidden: {
+      width: 0,
+      height: 0,
+      opacity: 0,
+      scale: 0,
+      transition: { duration: 0.1 }
     }
   }
 
@@ -250,6 +223,11 @@ export default function GlowCursor() {
     },
     text: { 
       scale: 0,
+      transition: { duration: 0.1 }
+    },
+    hidden: {
+      scale: 0,
+      opacity: 0,
       transition: { duration: 0.1 }
     }
   }
@@ -281,6 +259,13 @@ export default function GlowCursor() {
       opacity: 0,
       scale: 0,
       transition: { duration: 0.2 }
+    },
+    hidden: {
+      width: 0,
+      height: 0,
+      opacity: 0,
+      scale: 0,
+      transition: { duration: 0.1 }
     }
   }
 
@@ -317,8 +302,6 @@ export default function GlowCursor() {
           animate={cursorVariant}
           className="glow-ring-shift flex items-center justify-center border rounded-full relative"
           style={{
-            x: springPullX,
-            y: springPullY,
             scaleX: cursorVariant === 'default' ? scaleX : 1,
             scaleY: cursorVariant === 'default' ? scaleY : 1,
             rotate: cursorVariant === 'default' ? angleSpring : 0,

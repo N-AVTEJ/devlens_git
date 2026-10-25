@@ -1,4 +1,4 @@
-import { validateAndNormalizeRoadmap, ROADMAP_URLS } from '../data/roadmapRegistry';
+import { validateAndNormalizeRoadmap, ROADMAP_URLS } from '../data/roadmapRegistry.js';
 
 const getBaseUrl = () => {
   if (typeof window !== 'undefined') {

@@ -6,6 +6,7 @@ import {
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
+  PolarRadiusAxis,
   Radar,
   ResponsiveContainer
 } from 'recharts'
@@ -253,6 +254,11 @@ export default function Dashboard({ data, onBack }) {
                     <PolarAngleAxis
                       dataKey="axis"
                       tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 10, fontFamily: 'var(--font-mono)' }}
+                    />
+                    <PolarRadiusAxis
+                      domain={[0, 100]}
+                      axisLine={false}
+                      tick={false}
                     />
                     <Radar
                       name="Skills"
@@ -508,7 +514,7 @@ export default function Dashboard({ data, onBack }) {
 
                       <div>
                         <span className="font-mono text-[9px] text-white/60 uppercase block tracking-wider mb-0.5">
-                          Month {idx + 1} — {monthData.month || 'Target'}
+                          Month {idx + 1} — Target Milestone
                         </span>
                         <h4 className="text-sm font-semibold text-white leading-snug font-manrope">
                           {monthData.goal}

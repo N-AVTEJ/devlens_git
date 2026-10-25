@@ -4,20 +4,72 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextResponse } from 'next/server'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+function isOriginAllowed(origin, host) {
+  if (!origin) return true
+
+  const originClean = origin.trim().replace(/\/$/, '')
+  const allowed = new Set([
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+  ])
+
+  if (process.env.NEXT_PUBLIC_BASE_URL) {
+    allowed.add(process.env.NEXT_PUBLIC_BASE_URL.trim().replace(/\/$/, ''))
+  }
+  if (process.env.VERCEL_URL) {
+    allowed.add(`https://${process.env.VERCEL_URL.trim().replace(/\/$/, '')}`)
+    allowed.add(`http://${process.env.VERCEL_URL.trim().replace(/\/$/, '')}`)
+  }
+  if (host) {
+    const hostClean = host.trim().replace(/\/$/, '')
+    allowed.add(`http://${hostClean}`)
+    allowed.add(`https://${hostClean}`)
+  }
+
+  return allowed.has(originClean)
 }
 
-export async function OPTIONS() {
+function getCorsHeaders(req) {
+  const origin = req.headers.get('origin')
+  const host = req.headers.get('host')
+
+  const headers = {
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  }
+
+  if (origin && isOriginAllowed(origin, host)) {
+    headers['Access-Control-Allow-Origin'] = origin
+    headers['Vary'] = 'Origin'
+  }
+
+  return headers
+}
+
+export async function OPTIONS(req) {
+  const origin = req.headers.get('origin')
+  const host = req.headers.get('host')
+
+  if (origin && !isOriginAllowed(origin, host)) {
+    return new Response(null, { status: 403 })
+  }
+
+  const headers = getCorsHeaders(req)
   return new Response(null, {
     status: 204,
-    headers: corsHeaders,
+    headers,
   })
 }
 
 export async function POST(req) {
+  const origin = req.headers.get('origin')
+  const host = req.headers.get('host')
+
+  if (origin && !isOriginAllowed(origin, host)) {
+    return NextResponse.json({ error: 'Origin not allowed' }, { status: 403 })
+  }
+
+  const corsHeaders = getCorsHeaders(req)
   console.log('GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY)
   try {
     const apiKey = process.env.GEMINI_API_KEY
@@ -48,23 +100,24 @@ export async function POST(req) {
     }
     let text = ''
 
-    // Note: gemini-3.8-flash may not be a valid model ID — verify against the current Gemini API model list before deploying; if invalid, remove it from the fallback chain entirely so we don't waste a failed round-trip on every single request.
-    try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-3.8-flash', generationConfig })
-      const result = await model.generateContent(prompt)
-      text = result.response.text()
-    } catch (primaryErr) {
-      console.warn('gemini-3.8-flash error, trying gemini-2.5-flash fallback:', primaryErr.message)
+    // Model fallback chain: verified production models for Gemini API
+    const modelsToTry = ['gemini-2.5-flash', 'gemini-2.5-flash-lite']
+    let lastError = null
+
+    for (const modelName of modelsToTry) {
       try {
-        const fallbackModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash', generationConfig })
-        const result = await fallbackModel.generateContent(prompt)
+        const model = genAI.getGenerativeModel({ model: modelName, generationConfig })
+        const result = await model.generateContent(prompt)
         text = result.response.text()
-      } catch (secondaryErr) {
-        console.warn('gemini-2.5-flash error, trying gemini-flash-latest fallback:', secondaryErr.message)
-        const tertiaryModel = genAI.getGenerativeModel({ model: 'gemini-flash-latest', generationConfig })
-        const result = await tertiaryModel.generateContent(prompt)
-        text = result.response.text()
+        if (text) break
+      } catch (err) {
+        lastError = err
+        console.warn(`${modelName} generation failed, attempting next model:`, err.message)
       }
+    }
+
+    if (!text && lastError) {
+      throw lastError
     }
 
     console.log('Gemini response received, length:', text.length)

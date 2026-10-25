@@ -6,6 +6,7 @@ import * as THREE from 'three'
 
 function GlobeMesh() {
   const groupRef = useRef()
+  const ringRef2 = useRef()
   const scrollRef = useRef(0)
   const prefersReducedMotion = useRef(false)
 
@@ -35,17 +36,16 @@ function GlobeMesh() {
       // Slide left slightly as we scroll down to follow the bento layout
       groupRef.current.position.x = 0.8 - scrollRef.current * 0.0006
     }
+    if (ringRef2.current) {
+      ringRef2.current.rotation.z = t * 0.1
+    }
   })
-
-  // Create geometry once for points and wireframe to save GPU memory
-  const sphereGeometry = new THREE.SphereGeometry(2.1, 32, 32)
-  const ringGeometry1 = new THREE.TorusGeometry(2.5, 0.006, 8, 64)
-  const ringGeometry2 = new THREE.TorusGeometry(2.8, 0.004, 8, 64)
 
   return (
     <group ref={groupRef} position={[0.8, 0.5, 0]}>
       {/* 1. Point Cloud Layer (Glowing red nodes) */}
-      <points geometry={sphereGeometry}>
+      <points>
+        <sphereGeometry args={[2.1, 32, 32]} />
         <pointsMaterial 
           color="#ef233c" 
           size={0.042} 
@@ -57,7 +57,8 @@ function GlobeMesh() {
       </points>
 
       {/* 2. Grid Wireframe Layer */}
-      <mesh geometry={sphereGeometry}>
+      <mesh>
+        <sphereGeometry args={[2.1, 32, 32]} />
         <meshBasicMaterial 
           color="#ef233c" 
           wireframe 
@@ -68,12 +69,14 @@ function GlobeMesh() {
       </mesh>
 
       {/* 3. Orbiting Data Stream Ring 1 */}
-      <mesh geometry={ringGeometry1} rotation={[Math.PI / 4, Math.PI / 6, 0]}>
+      <mesh rotation={[Math.PI / 4, Math.PI / 6, 0]}>
+        <torusGeometry args={[2.5, 0.006, 8, 64]} />
         <meshBasicMaterial color="#ff3366" transparent opacity={0.15} depthWrite={false} />
       </mesh>
 
       {/* 4. Orbiting Data Stream Ring 2 */}
-      <mesh geometry={ringGeometry2} rotation={[-Math.PI / 3, -Math.PI / 5, t => t * 0.1]}>
+      <mesh ref={ringRef2} rotation={[-Math.PI / 3, -Math.PI / 5, 0]}>
+        <torusGeometry args={[2.8, 0.004, 8, 64]} />
         <meshBasicMaterial color="#ef233c" transparent opacity={0.12} depthWrite={false} />
       </mesh>
     </group>

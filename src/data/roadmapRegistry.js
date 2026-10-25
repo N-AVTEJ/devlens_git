@@ -50,7 +50,9 @@ export const ROADMAP_URLS = {
 
 /**
  * Validates and normalizes roadmap data against ROADMAP_URLS whitelist.
- * Overwrites invalid URLs with safe fallback ('full-stack') and aligns targetRole.
+ * Returns a new normalized roadmap object without mutating the original input.
+ * Fuzzy-matches on targetRole if URL does not directly match, and preserves
+ * the original targetRole even when assigning fallback URLs.
  */
 export function validateAndNormalizeRoadmap(roadmap) {
   if (!roadmap || typeof roadmap !== 'object') {
@@ -62,34 +64,108 @@ export function validateAndNormalizeRoadmap(roadmap) {
   }
 
   const rawUrl = (roadmap.roadmapUrl || '').trim()
+  const rawTargetRole = (roadmap.targetRole || '').trim()
 
   let matchedKey = null
 
+  const cleanUrl = rawUrl.split('?')[0].split('#')[0]
+
   // 1. Direct slug or path extraction: strip domain, protocol, slashes
-  const normalizedSlug = rawUrl
+  const normalizedSlug = cleanUrl
     .toLowerCase()
     .replace(/^(https?:\/\/)?(www\.)?roadmap\.sh\/?/, '')
-    .replace(/\/$/, '')
+    .replace(/\/+$/, '')
+
+  const slugAliases = {
+    'fullstack': 'full-stack',
+    'front-end': 'frontend',
+    'back-end': 'backend',
+    'ux-designer': 'ux-design',
+    'ui-ux': 'ux-design',
+    'ui-ux-design': 'ux-design',
+    'data-science': 'ai-data-scientist',
+    'machine-learning': 'ai-data-scientist',
+    'ml': 'ai-data-scientist',
+    'ai': 'ai-engineer',
+    'ai-developer': 'ai-engineer',
+    'cybersecurity': 'cyber-security',
+    'infosec': 'cyber-security',
+    'cloud': 'devops',
+    'sre': 'devops',
+    'software-architecture': 'software-architect',
+    'systems-design': 'system-design'
+  }
 
   if (ROADMAP_URLS[normalizedSlug]) {
     matchedKey = normalizedSlug
+  } else if (slugAliases[normalizedSlug] && ROADMAP_URLS[slugAliases[normalizedSlug]]) {
+    matchedKey = slugAliases[normalizedSlug]
   } else {
     // 2. Check full URL matches
     for (const [key, url] of Object.entries(ROADMAP_URLS)) {
-      if (rawUrl.toLowerCase() === url.toLowerCase()) {
+      if (cleanUrl.toLowerCase() === url.toLowerCase()) {
         matchedKey = key
         break
       }
     }
   }
 
-  if (matchedKey) {
-    roadmap.roadmapUrl = ROADMAP_URLS[matchedKey]
-  } else {
-    // Fallback safe normalization per requirement
-    roadmap.roadmapUrl = ROADMAP_URLS['full-stack']
-    roadmap.targetRole = 'Full-Stack Developer'
+  // 3. Fuzzy-match on targetRole if URL did not match
+  if (!matchedKey && rawTargetRole) {
+    const cleanRole = rawTargetRole.toLowerCase()
+    
+    // Check common role aliases
+    const roleAliases = {
+      'frontend': ['front-end', 'frontend', 'front end', 'react', 'vue', 'angular', 'ui developer', 'web developer'],
+      'backend': ['back-end', 'backend', 'back end', 'api developer', 'server', 'node'],
+      'full-stack': ['fullstack', 'full-stack', 'full stack', 'mern', 'mean'],
+      'devops': ['devops', 'sre', 'site reliability', 'cloud', 'infrastructure', 'platform engineer'],
+      'ai-engineer': ['ai engineer', 'artificial intelligence', 'genai', 'llm'],
+      'ai-data-scientist': ['data scientist', 'data science', 'machine learning', 'ml engineer', 'deep learning'],
+      'data-analyst': ['data analyst', 'data analytics', 'business analyst'],
+      'ux-design': ['ux', 'ui/ux', 'ui designer', 'product designer', 'ux designer', 'user experience'],
+      'cyber-security': ['cyber security', 'infosec', 'security engineer', 'penetration tester', 'cybersecurity'],
+      'qa': ['qa', 'quality assurance', 'test engineer', 'automation tester', 'sdet'],
+      'system-design': ['system design', 'systems design'],
+      'software-architect': ['architect', 'solutions architect', 'software architect'],
+      'android': ['android'],
+      'ios': ['ios', 'swift', 'apple'],
+      'blockchain': ['blockchain', 'web3', 'crypto', 'solidity'],
+      'python': ['python developer', 'python engineer'],
+      'java': ['java developer', 'java engineer'],
+      'golang': ['golang', 'go developer', 'go engineer'],
+      'rust': ['rust developer', 'rust engineer'],
+    }
+
+    for (const [key, aliases] of Object.entries(roleAliases)) {
+      if (aliases.some(alias => cleanRole.includes(alias))) {
+        matchedKey = key
+        break
+      }
+    }
+
+    // Direct key matching against ROADMAP_URLS keys
+    if (!matchedKey) {
+      for (const key of Object.keys(ROADMAP_URLS)) {
+        const keyParts = key.split('-')
+        if (keyParts.every(part => cleanRole.includes(part))) {
+          matchedKey = key
+          break
+        }
+      }
+    }
   }
 
-  return roadmap
+  // Determine final roadmap URL: matched URL or fallback
+  const finalUrl = matchedKey ? ROADMAP_URLS[matchedKey] : ROADMAP_URLS['full-stack']
+  
+  // Preserve targetRole when fallback URLs are assigned (default to fallback role only if targetRole was not provided)
+  const finalTargetRole = rawTargetRole || 'Full-Stack Developer'
+
+  return {
+    ...roadmap,
+    targetRole: finalTargetRole,
+    roadmapUrl: finalUrl,
+    months: Array.isArray(roadmap.months) ? [...roadmap.months] : []
+  }
 }

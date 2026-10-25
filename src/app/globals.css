@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), monospace;
+  --font-manrope: var(--font-manrope), sans-serif;
+}
+
 :root {
   --bg-void: #000000;
   --bg-surface: #080808;
@@ -207,9 +213,38 @@ body::after {
   border-radius: 2px;
 }
 
-/* Enforce global cursor override on all pointer indicators */
-* {
-  cursor: none !important;
+/* Custom cursor enabled on desktop pointer devices only; inputs/textareas and touch devices keep native cursors */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a, button, [role="button"], [data-magnetic] {
+    cursor: none;
+  }
+}
+
+input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]),
+textarea,
+[contenteditable="true"] {
+  cursor: text !important;
+}
+
+select,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+input[type="file"] {
+  cursor: pointer !important;
+}
+
+@media (hover: none), (pointer: coarse) {
+  *,
+  *::before,
+  *::after {
+    cursor: auto !important;
+  }
 }
 
 @keyframes cursor-color-shift {

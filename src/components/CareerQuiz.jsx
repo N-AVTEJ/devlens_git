@@ -54,8 +54,8 @@ export default function CareerQuiz({ analysis, onComplete, onBack }) {
       {/* Back button */}
       <BackButton onClick={onBack} label="BACK TO PATHS" />
 
-      {/* Scan screen overlay when loading - Active only during the github scanning phase */}
-      <ScanSequence scanMessages={scanMessages} scanStep={scanStep} isLoading={loading && loadingPhase === 'github'} />
+      {/* Scan screen overlay when loading */}
+      <ScanSequence scanMessages={scanMessages} scanStep={scanStep} isLoading={loading} />
 
       <AnimatePresence mode="wait">
         {!loading && (

@@ -17,7 +17,7 @@ export function useQuizAnalysis() {
 
   const submit = async (answers) => {
     setLoading(true);
-    setLoadingPhase('github');
+    setLoadingPhase('quiz');
     setError(null);
     setResult(null);
     setScanStep(0);
@@ -40,8 +40,6 @@ export function useQuizAnalysis() {
     }, 1200);
 
     try {
-      // Transition to AI analysis phase before Gemini API starts
-      setLoadingPhase('ai');
       const geminiResult = await analyzeQuizAnswers(answers);
       
       if (geminiResult.scanMessages && geminiResult.scanMessages.length > 0) {
